@@ -20,3 +20,15 @@ registerPaint("rect", class {
     ctx.fillRect(left, top, width, height);
   }
 });
+
+registerPaint("circle", class {
+  static get inputProperties() { return ["--fill"]; }
+  paint(ctx, geom, inputs) {
+    ctx.fillStyle = asString(inputs, 'fill', 'black');
+    var left = asNumber(inputs, 'center-left', 0);
+    var top = asNumber(inputs, 'center-top', 0);
+    var radius = asNumber(inputs, 'radius', 0);
+    ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI);
+    ctx.fill()
+  }
+});
