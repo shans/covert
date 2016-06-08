@@ -8,20 +8,8 @@
   position: relative;
 }
 
-#a {
-  --fill: rgba(128, 192, 128, 0.5);
-  --left: 50;
-  --width: 50%;
-  --height: 100;
-  --top: 50;
-}
-
-#b {
+.red-line {
   --stroke: red;
-  --left: 100;
-  --width: 100;
-  --height: 10%;
-  --top: 70;
   --shadow-color: black;
   --shadow-blur: 2;
 }
@@ -38,19 +26,16 @@
   --line-width: 2;
 }
 
-#d {
+.thin-stroked {
   --stroke: black;
-  --path: M 20 50 l 100 20 l -50 -60 z;
-  --texture: var(--texture-texture);
   --line-width: 1;
 }
 
-#f {
-  --stroke: black;
+
+.textured {
   --texture: var(--texture-texture);
-  --path: M 20 60 l 100 20 l -50 60 z;
-  --line-width: 1;
 }
+
 </style>
 
 <div id='test'>
@@ -59,10 +44,10 @@
     <cvt-circle fill=black center-left=50 center-top=50 radius=10></cvt-circle>
   </cvt-texture>
   <cvt-circle class="green-shadow stroked" center-left=50% center-top=50% radius=20% fill=yellow></cvt-circle>
-  <cvt-rect id=b></cvt-rect>
-  <cvt-rect id=a></cvt-rect>
-  <cvt-shape id=d></cvt-shape>
-  <cvt-shape id=f></cvt-shape>
+  <cvt-rect class="red-line" left=100 top=70 width=100 height=10%></cvt-rect>
+  <cvt-rect left=50 top=50 width=50% height=100 fill=rgba(128,192,128,0.5)></cvt-rect>
+  <cvt-shape class="thin-stroked textured" path="M 20 50 l 100 20 l -50 -60 z"></cvt-shape>
+  <cvt-shape class="thin-stroked textured" path="M 20 60 l 100 20 l -50 60 z"></cvt-shape>
 </div>
 
 <script>

@@ -14,7 +14,12 @@
   </template>
   <script>
     Polymer({
-      is: 'cvt-shape'
+      is: 'cvt-shape',
+      behaviors: [CvtHasAttributes, CvtDrawable],
+
+      properties: {
+        path: {type: String, observer: "updateStyle"},
+      },
     });
   </script>
 </dom-module>
