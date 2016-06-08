@@ -66,12 +66,15 @@ function strokeRect(ctx, params) {
   ctx.strokeRect(params.left, params.top, params.width, params.height);
 }
 
+function clipRect(ctx, params) {
+  ctx.clip(new Path2D(`M ${params.left} ${params.top} l ${params.width} 0 l 0 ${params.height} l -${params.width} 0 z`));
+}
+
 function texture(ctx, geom, texture) {
   var parts = texture.split("|");
   for (var part of parts) {
     var cmds = part.split(",");
     var draw = (() => undefined);
-    var fill = (() => undefined);
     var fillInfo = { stroke: false, fill: false};
     ctx.save();
     ctx.beginPath();
@@ -121,7 +124,7 @@ function getParamsCircle(ctx, geom, inputs) {
   var left = resolveNumberOrPercent(inputs, 'center-left', geom.width);
   var top = resolveNumberOrPercent(inputs, 'center-top', geom.height);
   var radius = resolveNumberOrPercent(inputs, 'radius', Math.sqrt(geom.width * geom.width + geom.height * geom.height));
-  ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI);
+  return (() => ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI));
 }
 
 function paint(ctx, geom, inputs, getParams, fill, stroke, clip, texture) {
@@ -144,13 +147,13 @@ function doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture) {
 
 registerPaint("rect", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, getParamsRect, fillRect, strokeRect);
+    paint(ctx, geom, inputs, getParamsRect, fillRect, strokeRect, clipRect, texture);
   }
 });
 
 registerPaint("circle", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, getParamsCircle, a => a.fill(), a => a.stroke());
+    paint(ctx, geom, inputs, getParamsCircle, (a,b) => b() || a.fill(), (a, b) => b() || a.stroke(), (a,b) => b() || a.clip(), texture);
   }
 });
 
