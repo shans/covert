@@ -27,33 +27,52 @@ function resolveNumberOrPercent(input, name, size) {
 }
 
 function prepareFill(ctx, inputs) {
-  ctx.fillStyle = asString(inputs, 'fill', 'black');
+  var fill = false;
+  var stroke = false;
+  if (inputs.get('--fill') != null) {
+    ctx.fillStyle = asString(inputs, 'fill', 'black');
+    fill = true;
+  }
   ctx.shadowColor = asString(inputs, 'shadow-color', '');
   ctx.shadowBlur = asNumber(inputs, 'shadow-blur', 0);
   ctx.shadowOffsetX = asNumber(inputs, 'shadow-offset-x', 0);
   ctx.shadowOffsetY = asNumber(inputs, 'shadow-offset-y', 0);
+  if (inputs.get('--stroke') != null) {
+    ctx.strokeStyle = asString(inputs, 'stroke', 'black');
+    ctx.lineWidth = asNumber(inputs, 'line-width', 1);
+    stroke = true;
+  }
+  return {fill: fill, stroke: stroke};
+}
+
+function resetShadow(ctx) {
+  ctx.shadowColor = 'transparent';
 }
 
 registerPaint("rect", class {
   static get inputProperties() { return ["--fill"]; }
   paint(ctx, geom, inputs) {
-    prepareFill(ctx, inputs);
+    var fillInfo = prepareFill(ctx, inputs);
     var left = resolveNumberOrPercent(inputs, 'left', geom.width);
     var top = resolveNumberOrPercent(inputs, 'top', geom.height);
     var width = resolveNumberOrPercent(inputs, 'width', geom.width);
-    var height = Math.floor(resolveNumberOrPercent(inputs, 'height', geom.height));
-    ctx.fillRect(left, top, width, height);
+    var height = resolveNumberOrPercent(inputs, 'height', geom.height);
+    if (fillInfo.fill) ctx.fillRect(left, top, width, height);
+    if (fillInfo.fill && fillInfo.stroke) resetShadow(ctx);
+    if (fillInfo.stroke) ctx.strokeRect(left, top, width, height);
   }
 });
 
 registerPaint("circle", class {
   static get inputProperties() { return ["--fill"]; }
   paint(ctx, geom, inputs) {
-    prepareFill(ctx, inputs);
+    var fillInfo = prepareFill(ctx, inputs);
     var left = resolveNumberOrPercent(inputs, 'center-left', geom.width);
     var top = resolveNumberOrPercent(inputs, 'center-top', geom.height);
     var radius = resolveNumberOrPercent(inputs, 'radius', Math.sqrt(geom.width * geom.width + geom.height * geom.height));
     ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI);
-    ctx.fill()
+    if (fillInfo.fill) ctx.fill();
+    if (fillInfo.fill && fillInfo.stroke) resetShadow(ctx);
+    if (fillInfo.stroke) ctx.stroke();
   }
 });
