@@ -89,6 +89,12 @@ function texture(ctx, geom, texture) {
             doPaint(ctx, geom, fillInfo, {left: Number(bits[1]), top: Number(bits[2]), width: Number(bits[3]), height: Number(bits[4])}, fillRect, strokeRect);
           })(bits);
           break;
+        case 'shape':
+          draw = (bits => function() {
+            path = bits.slice(1).join(' ');
+            doPaint(ctx, geom, fillInfo, new Path2D(path), (a,b) => a.fill(b), (a,b) => a.stroke(b));
+          })(bits);
+          break;
         case 'fill':
           fillInfo.fill = true;
           ctx.fillStyle = bits[1];

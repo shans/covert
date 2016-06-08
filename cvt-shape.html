@@ -20,6 +20,16 @@
       properties: {
         path: {type: String, observer: "updateStyle"},
       },
+      
+      serialize: function() {
+        var style = getComputedStyle(this);
+        var path = style.getPropertyValue('--path').trim();
+        var s = `shape ${path}`;
+        s += this.serializeDrawable(style);
+        return s;
+      }
+
+
     });
   </script>
 </dom-module>
