@@ -15,7 +15,7 @@
   <script>
     Polymer({
       is: 'cvt-shape',
-      behaviors: [CvtHasAttributes, CvtDrawable],
+      behaviors: [CvtHasAttributes, CvtDrawable, CvtTexturable],
 
       properties: {
         path: {type: String, observer: "updateStyle"},

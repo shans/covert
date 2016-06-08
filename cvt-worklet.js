@@ -73,7 +73,7 @@ function clipRect(ctx, params) {
 function texture(ctx, geom, texture) {
   var parts = texture.split("|");
   for (var part of parts) {
-    var cmds = part.split(",");
+    var cmds = part.split("^");
     var draw = (() => undefined);
     var fillInfo = { stroke: false, fill: false};
     ctx.save();

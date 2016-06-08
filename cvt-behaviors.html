@@ -6,7 +6,7 @@ CvtDrawable = {
     'line-width': {type: String, observer: "updateStyle"},
     'shadow-color': {type: String, observer: "updateStyle"},
     'shadow-blur': {type: String, observer: "updateStyle"},
-    'shadow-offset': {type: String, observer: "updateStyle"}
+    'shadow-offset': {type: String, observer: "updateStyle"},
   },
 
 
@@ -14,18 +14,18 @@ CvtDrawable = {
     s = '';
     var c = style.getPropertyValue('--fill').trim();
     if (c !== '')
-      s += `, fill ${c}`;
+      s += `^ fill ${c}`;
     c = style.getPropertyValue('--stroke').trim();
     if (c !== '') {
       var l = style.getPropertyValue('--line-width').trim();
-      s += `, stroke ${c} ${l}`;
+      s += `^ stroke ${c} ${l}`;
     }
     c = style.getPropertyValue('--shadow-color').trim();
     if (c !== '') {
       x = style.getPropertyValue('--shadow-offset-x').trim();
       y = style.getPropertyValue('--shadow-offset-y').trim();
       b = style.getPropertyValue('--shadow-blur').trim();
-      s += `, shadow ${c} ${b} ${x} ${y}`;
+      s += `^ shadow ${c} ${b} ${x} ${y}`;
     }
 
     return s;
@@ -37,11 +37,21 @@ CvtHasAttributes = {
     for (property in this.properties)
       if (this[property] !== null)
         this.style.setProperty('--' + property, this[property]);
-    for (behavior of this.behaviors)
-      for (property in behavior.properties)
+    if (this.behaviors.indexOf(CvtDrawable) > -1)
+      for (property in CvtDrawable.properties)
         if (this[property] !== null)
           this.style.setProperty('--' + property, this[property]);
   },
 };
+
+CvtTexturable = {
+  properties: {
+    texture: {type: String, observer: "updateTexture"}
+  },
+
+  updateTexture: function() {
+    this.style.setProperty('--texture', `var(--texture-${this.texture})`);
+  }
+}
 
 </script>

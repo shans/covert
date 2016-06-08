@@ -45,13 +45,19 @@
     <cvt-rect fill=red left=25 top=25 width=50 height=10></cvt-rect>
     <cvt-shape class="thin-stroked" path="M 25 25 l 50 50"></cvt-shape>
   </cvt-texture>
+  <cvt-texture name=texture2>
+    <cvt-circle class="green-shadow stroked" fill="rgb(128,128,200)" center-left=50 center-top=50 radius=40></cvt-circle>
+    <cvt-circle fill=blue center-left=50 center-top=50 radius=10></cvt-circle>
+  </cvt-texture>
+
+  <cvt-shape texture=texture2 path="M 15 15 l 100 20 l -80 100 z"></cvt-shape>
   <cvt-circle class="green-shadow stroked" center-left=50% center-top=50% radius=20% fill=yellow></cvt-circle>
   <cvt-rect class="red-line" left=100 top=70 width=100 height=10%></cvt-rect>
   <cvt-rect left=50 top=50 width=50% height=100 fill=rgba(128,192,128,0.5)></cvt-rect>
-  <cvt-shape class="thin-stroked textured" path="M 20 50 l 100 20 l -50 -60 z"></cvt-shape>
-  <cvt-shape class="thin-stroked textured" path="M 20 60 l 100 20 l -50 60 z"></cvt-shape>
-  <cvt-rect class="thin-stroked textured" left=47 top=5 width=8 height=15></cvt-rect>
-  <cvt-circle class="thin-stroked textured" center-left=5% center-top=5% radius=5%></cvt-circle>
+  <cvt-shape class="thin-stroked" path="M 20 50 l 100 20 l -50 -60 z" texture="texture"></cvt-shape>
+  <cvt-shape class="thin-stroked" path="M 20 60 l 100 20 l -50 60 z" texture="texture"></cvt-shape>
+  <cvt-rect class="thin-stroked" left=47 top=5 width=8 height=15 texture="texture"></cvt-rect>
+  <cvt-circle class="thin-stroked" center-left=5% center-top=5% radius=5% texture="texture"></cvt-circle>
 </div>
 
 <script>
