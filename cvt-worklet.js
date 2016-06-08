@@ -84,6 +84,11 @@ function texture(ctx, geom, texture) {
             doPaint(ctx, geom, fillInfo, null, a => a.fill(), a => a.stroke());
           })(bits);
           break;
+        case 'rect':
+          draw = (bits => function() {
+            doPaint(ctx, geom, fillInfo, {left: Number(bits[1]), top: Number(bits[2]), width: Number(bits[3]), height: Number(bits[4])}, fillRect, strokeRect);
+          })(bits);
+          break;
         case 'fill':
           fillInfo.fill = true;
           ctx.fillStyle = bits[1];

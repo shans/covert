@@ -24,6 +24,19 @@
         width: {type: String, observer: "updateStyle"},
         height: {type: String, observer: "updateStyle"},
       },
+
+      serialize: function() {
+        var style = getComputedStyle(this);
+        var x = style.getPropertyValue('--left').trim();
+        var y = style.getPropertyValue('--top').trim();
+        var w = style.getPropertyValue('--width').trim();
+        var h = style.getPropertyValue('--height').trim();
+        var s = `rect ${x} ${y} ${w} ${h}`;
+        s += this.serializeDrawable(style);
+        return s;
+      }
+
+        
     });
   </script>
 </dom-module>
