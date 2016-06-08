@@ -1,0 +1,25 @@
+<script>
+CvtDrawable = {
+  properties: {
+    fill: {type: String, observer: "updateStyle"},
+    stroke: {type: String, observer: "updateStyle"},
+    'line-width': {type: String, observer: "updateStyle"},
+    'shadow-color': {type: String, observer: "updateStyle"},
+    'shadow-blur': {type: String, observer: "updateStyle"},
+    'shadow-offset': {type: String, observer: "updateStyle"}
+  },
+
+  registered: function() {
+    console.log(this.properties);
+  }
+};
+
+CvtHasAttributes = {
+  updateStyle: function() {
+    for (property in this.properties)
+      if (this[property] !== null)
+        this.style.setProperty('--' + property, this[property]);
+  },
+};
+
+</script>
