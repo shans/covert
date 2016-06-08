@@ -8,6 +8,15 @@
   position: relative;
 }
 
+#test2 {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  border: 1px solid black;
+  left: 416px;
+  top: 8px;
+}
+
 .red-line {
   --stroke: red;
   --shadow-color: black;
@@ -58,6 +67,17 @@
   <cvt-shape class="thin-stroked" path="M 20 60 l 100 20 l -50 60 z" texture="texture"></cvt-shape>
   <cvt-rect class="thin-stroked" left=47 top=5 width=8 height=15 texture="texture"></cvt-rect>
   <cvt-circle class="thin-stroked" center-left=5% center-top=5% radius=5% texture="texture"></cvt-circle>
+</div>
+<div id='test2'>
+  <cvt-texture name=premelt>
+    <cvt-rect left=50 top=50 width=100 height=100 fill=white></cvt-rect>
+    <cvt-rect left=158 top=75 width=100 height=100 fill=white></cvt-rect>
+    <cvt-circle center-left=400 center-top=214 radius=75 fill=white></cvt-circle>
+    <cvt-circle center-left=300 center-top=340 radius=75 fill=white></cvt-circle>
+  </cvt-texture>
+  <cvt-melt name=melt texture=premelt></cvt-melt>
+  <cvt-rect width=400 height=400 fill=black></cvt-rect>
+  <cvt-rect width=400 height=400 texture=melt></cvt-rect>
 </div>
 
 <script>

@@ -1,0 +1,29 @@
+<link rel='import' href='../bower_components/polymer/polymer.html'>
+<link rel='import' href='cvt-behaviors.html'></link>
+
+<dom-module id="cvt-melt">
+  <template>
+    <style>
+      :host {
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        position: absolute;
+      }
+    </style>
+  </template>
+  <script>
+    Polymer({
+      is: 'cvt-melt',
+      behaviors: [CvtHasAttributes, CvtDrawable, CvtTexturable],
+
+      properties: {
+        name: String
+      },
+
+      attached: function() {
+        document.documentElement.style.setProperty(`--texture-${this.name}`, `melt var(--texture-${this.texture})`);
+      }
+    });
+  </script>
+</dom-module>

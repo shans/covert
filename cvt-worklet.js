@@ -34,6 +34,12 @@ function prepareFill(ctx, inputs) {
     fill = true;
   }
   var texture = asString(inputs, 'texture', undefined);
+  var melt = undefined;
+  if (texture && texture.substring(0, 5) == 'melt ') {
+    melt = texture.substring(5);
+    texture = undefined;
+    console.log(melt);
+  }
   ctx.shadowColor = asString(inputs, 'shadow-color', '');
   ctx.shadowBlur = asNumber(inputs, 'shadow-blur', 0);
   ctx.shadowOffsetX = asNumber(inputs, 'shadow-offset-x', 0);
@@ -43,7 +49,7 @@ function prepareFill(ctx, inputs) {
     ctx.lineWidth = asNumber(inputs, 'line-width', 1);
     stroke = true;
   }
-  return {fill: fill, stroke: stroke, texture: texture};
+  return {fill: fill, stroke: stroke, texture: texture, melt: melt};
 }
 
 function resetShadow(ctx) {
@@ -68,6 +74,37 @@ function strokeRect(ctx, params) {
 
 function clipRect(ctx, params) {
   ctx.clip(new Path2D(`M ${params.left} ${params.top} l ${params.width} 0 l 0 ${params.height} l -${params.width} 0 z`));
+}
+
+function melt(ctx, geom, melt, fill, stroke) {
+  ctx.shadowBlur = 60;
+  ctx.shadowColor = 'black';
+  ctx.fillStyle = 'black';
+  ctx.globalCompositeOperation = 'source-over';
+  texture(ctx, geom, melt);
+  ctx.shadowBlur = 0;
+  
+  ctx.globalCompositeOperation = 'xor';
+  ctx.fillStyle = 'black';
+  fill();
+
+  ctx.globalCompositeOperation = 'destination-atop';
+  ctx.fillStyle = 'white';
+  fill();
+
+  ctx.globalCompositeOperation = 'color-dodge';
+  ctx.fillStyle = 'rgba(210,210,210,1)';
+  fill();
+
+  ctx.globalCompositeOperation = 'color-burn';
+  console.log(ctx.globalCompositeOperation);
+  ctx.fillStyle = 'rgba(30,30,30,1);'
+  fill();
+  fill();
+  fill();
+  fill();
+  fill();
+  fill();
 }
 
 function texture(ctx, geom, texture) {
@@ -127,13 +164,13 @@ function getParamsCircle(ctx, geom, inputs) {
   return (() => ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI));
 }
 
-function paint(ctx, geom, inputs, getParams, fill, stroke, clip, texture) {
+function paint(ctx, geom, inputs, getParams, fill, stroke, clip, texture, melt) {
   var fillInfo = prepareFill(ctx, inputs);
   var params = getParams(ctx, geom, inputs);
-  doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture);
+  doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture, melt);
 }
 
-function doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture) {
+function doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture, melt) {
   if (fillInfo.fill) fill(ctx, params);
   if (fillInfo.texture) {
     ctx.save();
@@ -141,24 +178,29 @@ function doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture) {
     texture(ctx, geom, fillInfo.texture);
     ctx.restore();
   }
+  if (fillInfo.melt) {
+    ctx.save();
+    clip(ctx, params);
+    melt(ctx, geom, fillInfo.melt, () => fill(ctx, params));
+  }
   if (fillInfo.fill && fillInfo.stroke) resetShadow(ctx);
   if (fillInfo.stroke) stroke(ctx, params);
 }
 
 registerPaint("rect", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, getParamsRect, fillRect, strokeRect, clipRect, texture);
+    paint(ctx, geom, inputs, getParamsRect, fillRect, strokeRect, clipRect, texture, melt);
   }
 });
 
 registerPaint("circle", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, getParamsCircle, (a,b) => b() || a.fill(), (a, b) => b() || a.stroke(), (a,b) => b() || a.clip(), texture);
+    paint(ctx, geom, inputs, getParamsCircle, (a,b) => b() || a.fill(), (a, b) => b() || a.stroke(), (a,b) => b() || a.clip(), texture, melt);
   }
 });
 
 registerPaint("shape", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, (a, b, c) => new Path2D(asString(c, 'path')), (a, b) => a.fill(b), (a, b) => a.stroke(b), (a, b) => a.clip(b), texture);
+    paint(ctx, geom, inputs, (a, b, c) => new Path2D(asString(c, 'path')), (a, b) => a.fill(b), (a, b) => a.stroke(b), (a, b) => a.clip(b), texture, melt);
   }
 });
