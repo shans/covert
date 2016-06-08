@@ -9,7 +9,7 @@
 }
 
 #a {
-  --fill: rgba(0, 192, 0, 0.5);
+  --fill: rgba(128, 192, 128, 0.5);
   --left: 50;
   --width: 50%;
   --height: 100;
@@ -27,18 +27,25 @@
 #c {
   --fill: yellow;
   --center-left: 50%;
-  --radius: 20;
-  --center-top: 35%;
+  --center-top: 50%;
+  --radius: 20%;
+  --shadow-color: green;
+  --shadow-blur: 20;
+  --shadow-offset-x: 5;
+  --shadow-offset-y: 8;
 }
 
 </style>
 
 <div id='test'>
+  <cvt-circle id=c></cvt-circle>
   <cvt-rect id=b></cvt-rect>
   <cvt-rect id=a></cvt-rect>
-  <cvt-circle id=c></cvt-rect>
 </div>
 
 <script>
-test.animate({width: ["200px", "400px"], height: ["400px", "200px"]}, {duration: 2000, direction: "alternate", iterations: Infinity});
+test.animate({width: ["200px", "400px"]},
+    {duration: 2000, direction: "alternate", iterations: Infinity});
+test.animate({height: ["100px", "300px"]},
+    {duration: 2200, direction: "alternate", iterations: Infinity, easing: "ease"});
 </script>

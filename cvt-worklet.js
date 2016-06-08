@@ -26,14 +26,22 @@ function resolveNumberOrPercent(input, name, size) {
   return r.value / 100 * size;
 }
 
+function prepareFill(ctx, inputs) {
+  ctx.fillStyle = asString(inputs, 'fill', 'black');
+  ctx.shadowColor = asString(inputs, 'shadow-color', '');
+  ctx.shadowBlur = asNumber(inputs, 'shadow-blur', 0);
+  ctx.shadowOffsetX = asNumber(inputs, 'shadow-offset-x', 0);
+  ctx.shadowOffsetY = asNumber(inputs, 'shadow-offset-y', 0);
+}
+
 registerPaint("rect", class {
   static get inputProperties() { return ["--fill"]; }
   paint(ctx, geom, inputs) {
-    ctx.fillStyle = asString(inputs, 'fill', 'black');
+    prepareFill(ctx, inputs);
     var left = resolveNumberOrPercent(inputs, 'left', geom.width);
     var top = resolveNumberOrPercent(inputs, 'top', geom.height);
     var width = resolveNumberOrPercent(inputs, 'width', geom.width);
-    var height = resolveNumberOrPercent(inputs, 'height', geom.height);
+    var height = Math.floor(resolveNumberOrPercent(inputs, 'height', geom.height));
     ctx.fillRect(left, top, width, height);
   }
 });
@@ -41,10 +49,10 @@ registerPaint("rect", class {
 registerPaint("circle", class {
   static get inputProperties() { return ["--fill"]; }
   paint(ctx, geom, inputs) {
-    ctx.fillStyle = asString(inputs, 'fill', 'black');
+    prepareFill(ctx, inputs);
     var left = resolveNumberOrPercent(inputs, 'center-left', geom.width);
     var top = resolveNumberOrPercent(inputs, 'center-top', geom.height);
-    var radius = asNumber(inputs, 'radius', 0);
+    var radius = resolveNumberOrPercent(inputs, 'radius', Math.sqrt(geom.width * geom.width + geom.height * geom.height));
     ctx.ellipse(left, top, radius, radius, 0, 0, 2 * Math.PI);
     ctx.fill()
   }
