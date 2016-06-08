@@ -76,3 +76,13 @@ registerPaint("circle", class {
     if (fillInfo.stroke) ctx.stroke();
   }
 });
+
+registerPaint("shape", class {
+  paint(ctx, geom, inputs) {
+    var fillInfo = prepareFill(ctx, inputs);
+    var path = asString(inputs, 'path');
+    if (fillInfo.fill) ctx.fill(new Path2D(path));
+    if (fillInfo.fill && fillInfo.stroke) resetShadow(ctx);
+    if (fillInfo.stroke) ctx.stroke(new Path2D(path));
+  }
+});
