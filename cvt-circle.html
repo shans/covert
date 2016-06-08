@@ -16,6 +16,28 @@
     Polymer({
       is: 'cvt-circle',
 
+      properties: {
+        'center-left': {type: String, observer: "updateStyle"},
+        'center-top': {type: String, observer: "updateStyle"},
+        radius: {type: String, observer: "updateStyle"},
+        fill: {type: String, observer: "updateStyle"},
+        stroke: {type: String, observer: "updateStyle"},
+        'line-width': {type: String, observer: "updateStyle"},
+        'shadow-color': {type: String, observer: "updateStyle"},
+        'shadow-blur': {type: String, observer: "updateStyle"},
+        'shadow-offset': {type: String, observer: "updateStyle"}
+      },
+
+      updateStyle: function() {
+        for (property of ["center-left", "center-top", "radius"])
+          if (this[property] !== null)
+            this.style.setProperty('--' + property, this[property]);
+          
+        for (property of ["fill", "stroke", "line-width", "shadow-color", "shadow-blur", "shadow-offset-x", "shadow-offset-y"])
+          if (this[property] !== null)
+            this.style.setProperty('--' + property, this[property]);
+      },
+
       serialize: function() {
         var style = getComputedStyle(this);
         var x = style.getPropertyValue('--center-left').trim();

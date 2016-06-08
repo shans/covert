@@ -26,30 +26,16 @@
   --shadow-blur: 2;
 }
 
-#c, #e {
-  --fill: yellow;
-  --center-left: 50%;
-  --center-top: 50%;
-  --radius: 20%;
+.green-shadow {
   --shadow-color: green;
   --shadow-blur: 20;
   --shadow-offset-x: 5;
   --shadow-offset-y: 8;
+}
+
+.stroked {
   --stroke: black;
   --line-width: 2;
-}
-
-#e {
-  --center-left: 50;
-  --center-top: 50;
-  --radius: 40;
-}
-
-#g {
-  --center-left: 50;
-  --center-top: 50;
-  --radius: 10;
-  --fill: black;
 }
 
 #d {
@@ -69,10 +55,10 @@
 
 <div id='test'>
   <cvt-texture name=texture>
-    <cvt-circle id=e></cvt-circle>
-    <cvt-circle id=g></cvt-circle>
+    <cvt-circle class="green-shadow stroked" fill=pink center-left=50 center-top=50 radius=40 shadow-color='darkgreen'></cvt-circle>
+    <cvt-circle fill=black center-left=50 center-top=50 radius=10></cvt-circle>
   </cvt-texture>
-  <cvt-circle id=c></cvt-circle>
+  <cvt-circle class="green-shadow stroked" center-left=50% center-top=50% radius=20% fill=yellow></cvt-circle>
   <cvt-rect id=b></cvt-rect>
   <cvt-rect id=a></cvt-rect>
   <cvt-shape id=d></cvt-shape>
