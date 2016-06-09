@@ -14,7 +14,32 @@
   </template>
   <script>
     Polymer({
-      is: 'cvt-circle'
+      is: 'cvt-circle',
+
+      serialize: function() {
+        var style = getComputedStyle(this);
+        var x = style.getPropertyValue('--center-left').trim();
+        var y = style.getPropertyValue('--center-top').trim();
+        var r = style.getPropertyValue('--radius').trim();
+        var s = `circle ${x} ${y} ${r}`;
+        var c = style.getPropertyValue('--fill').trim();
+        if (c !== '')
+          s += `, fill ${c}`;
+        c = style.getPropertyValue('--stroke').trim();
+        if (c !== '') {
+          var l = style.getPropertyValue('--line-width').trim();
+          s += `, stroke ${c} ${l}`;
+        }
+        c = style.getPropertyValue('--shadow-color').trim();
+        if (c !== '') {
+          x = style.getPropertyValue('--shadow-offset-x').trim();
+          y = style.getPropertyValue('--shadow-offset-y').trim();
+          b = style.getPropertyValue('--shadow-blur').trim();
+          s += `, shadow ${c} ${b} ${x} ${y}`;
+        }
+
+        return s;
+      }
     });
   </script>
 </dom-module>

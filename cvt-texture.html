@@ -1,0 +1,35 @@
+<link rel='import' href='../bower_components/polymer/polymer.html'>
+
+<dom-module id="cvt-texture">
+  <template>
+    <style>
+      :host {
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        display: block;
+        position: absolute;
+      }
+    </style>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      is: 'cvt-texture',
+
+      properties: {
+        name: String
+      },
+
+      attached: function() {
+        var s = "";
+        var item = this.firstElementChild;
+        while (item) {
+          s += item.serialize() + '|';
+          item = item.nextElementSibling;
+        }
+        document.documentElement.style.setProperty(`--texture-${this.name}`, s);
+      }
+    });
+  </script>
+</dom-module>

@@ -26,7 +26,7 @@
   --shadow-blur: 2;
 }
 
-#c {
+#c, #e {
   --fill: yellow;
   --center-left: 50%;
   --center-top: 50%;
@@ -39,19 +39,44 @@
   --line-width: 2;
 }
 
+#e {
+  --center-left: 50;
+  --center-top: 50;
+  --radius: 40;
+}
+
+#g {
+  --center-left: 50;
+  --center-top: 50;
+  --radius: 10;
+  --fill: black;
+}
+
 #d {
   --stroke: black;
-  --path: M 20 50 l 100 20;
+  --path: M 20 50 l 100 20 l -50 -60 z;
+  --texture: var(--texture-texture);
   --line-width: 1;
 }
 
+#f {
+  --stroke: black;
+  --texture: var(--texture-texture);
+  --path: M 20 60 l 100 20 l -50 60 z;
+  --line-width: 1;
+}
 </style>
 
 <div id='test'>
+  <cvt-texture name=texture>
+    <cvt-circle id=e></cvt-circle>
+    <cvt-circle id=g></cvt-circle>
+  </cvt-texture>
   <cvt-circle id=c></cvt-circle>
   <cvt-rect id=b></cvt-rect>
   <cvt-rect id=a></cvt-rect>
   <cvt-shape id=d></cvt-shape>
+  <cvt-shape id=f></cvt-shape>
 </div>
 
 <script>
