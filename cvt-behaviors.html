@@ -35,8 +35,12 @@ CvtDrawable = {
 CvtHasAttributes = {
   updateStyle: function() {
     for (property in this.properties)
-      if (this[property] !== null)
-        this.style.setProperty('--' + property, this[property]);
+      if (this[property] !== null) {
+        var value = this[property];
+        if (property == 'path' && value != null)
+          value = `"${value}"`;
+        this.style.setProperty('--' + property, value);
+      }
     if (this.behaviors.indexOf(CvtDrawable) > -1)
       for (property in CvtDrawable.properties)
         if (this[property] !== null)

@@ -201,6 +201,8 @@ registerPaint("circle", class {
 
 registerPaint("shape", class {
   paint(ctx, geom, inputs) {
-    paint(ctx, geom, inputs, (a, b, c) => new Path2D(asString(c, 'path')), (a, b) => a.fill(b), (a, b) => a.stroke(b), (a, b) => a.clip(b), texture, melt);
+    var path = asString(inputs, 'path');
+    path = path.substring(1, path.length - 1);
+    paint(ctx, geom, inputs, (a, b, c) => new Path2D(path), (a, b) => a.fill(b), (a, b) => a.stroke(b), (a, b) => a.clip(b), texture, melt);
   }
 });
