@@ -1,19 +1,19 @@
 
 function asString(input, name, defaultValue) {
   var r = input.get('--' + name);
-  return r ? r.cssString.trim() : defaultValue;
+  return r ? r.cssText.trim() : defaultValue;
 }
 
 function asNumber(input, name, defaultValue) {
   var r = input.get('--' + name);
-  return r ? Number(r.cssString) : defaultValue;
+  return r ? Number(r.cssText) : defaultValue;
 }
 
 function asNumberOrPercent(input, name, defaultValue) {
   var r = input.get('--' + name);
   if (r == null)
     return defaultValue;
-  r = r.cssString;
+  r = r.cssText;
   if (!isNaN(Number(r)))
     return {type: "number", value: Number(r)};
   return {type: "percent", value: Number(r.split("%")[0])};
@@ -83,7 +83,7 @@ function melt(ctx, geom, melt, fill, stroke) {
   ctx.globalCompositeOperation = 'source-over';
   texture(ctx, geom, melt);
   ctx.shadowBlur = 0;
-  
+
   ctx.globalCompositeOperation = 'xor';
   ctx.fillStyle = 'black';
   fill();
@@ -187,19 +187,34 @@ function doPaint(ctx, geom, fillInfo, params, fill, stroke, clip, texture, melt)
   if (fillInfo.stroke) stroke(ctx, params);
 }
 
+var props = [
+  '--line-width', '--center-left', '--left', '--width', '--height', '--radius',
+  '--center-top', '--top', '--stroke', '--shadow-offset-y', '--shadow-offset-x',
+  '--shadow-blur', '--shadow-color', '--texture', '--fill', '--path'
+];
+
 registerPaint("rect", class {
+  static get inputProperties() {
+    return props;
+  }
   paint(ctx, geom, inputs) {
     paint(ctx, geom, inputs, getParamsRect, fillRect, strokeRect, clipRect, texture, melt);
   }
 });
 
 registerPaint("circle", class {
+  static get inputProperties() {
+    return props;
+  }
   paint(ctx, geom, inputs) {
     paint(ctx, geom, inputs, getParamsCircle, (a,b) => b() || a.fill(), (a, b) => b() || a.stroke(), (a,b) => b() || a.clip(), texture, melt);
   }
 });
 
 registerPaint("shape", class {
+  static get inputProperties() {
+    return props;
+  }
   paint(ctx, geom, inputs) {
     var path = asString(inputs, 'path');
     path = path.substring(1, path.length - 1);
